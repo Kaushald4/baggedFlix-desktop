@@ -1,6 +1,6 @@
 # MyyFlix Desktop
 
-![alt text](./myyflix.png "MyyFlix")
+![alt text](./screenshot/myyflix.png "MyyFlix")
 
 A modern cross-platform desktop application for streaming movies and TV series, built with Tauri v2 and React. This project provides a user-friendly interface to browse, watch, and manage your favorite content with features like watchlists, watch history, and seamless streaming.
 
@@ -40,7 +40,7 @@ A modern cross-platform desktop application for streaming movies and TV series, 
 - Node.js 18 or later
 - Rust (latest stable)
 - npm, yarn, pnpm, or bun
-- System dependencies for Tauri (see [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites))
+- System dependencies for Tauri (see [Tauri Prerequisites](https://tauri.app/start/prerequisites/))
 
 ## Installation
 
