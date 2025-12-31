@@ -1,11 +1,10 @@
 import { WatchPlayer } from "@/components/global/WatchPlayer";
 import { ArrowLeft, Info, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchMetaDetails, Meta } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation, useParams, useSearchParams } from "react-router";
-import { invoke } from "@tauri-apps/api/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Meta } from "@/lib/api";
 
 export default function WatchPage() {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -17,12 +16,10 @@ export default function WatchPage() {
     meta?: Meta | null;
   } | null;
 
-  const [videoInfo, setVideoInfo] = useState<{ link: any; meta: Meta | null }>(
-    () => ({
-      link: navState?.streamLink ?? null,
-      meta: navState?.meta ?? null,
-    })
-  );
+  const [videoInfo] = useState<{ link: any; meta: Meta | null }>(() => ({
+    link: navState?.streamLink ?? null,
+    meta: navState?.meta ?? null,
+  }));
 
   const season = searchParams.get("season") ?? "1";
   const episode = searchParams.get("episode") ?? "1";
