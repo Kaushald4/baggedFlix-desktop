@@ -26,49 +26,49 @@ export default function WatchPage() {
 
   const season = searchParams.get("season") ?? "1";
   const episode = searchParams.get("episode") ?? "1";
-  useEffect(() => {
-    let cancelled = false;
+  // useEffect(() => {
+  //   let cancelled = false;
 
-    (async () => {
-      if (!type || !id) return;
+  //   (async () => {
+  //     if (!type || !id) return;
 
-      const needLink = videoInfo.link == null;
-      const needMeta = videoInfo.meta == null;
+  //     const needLink = videoInfo.link == null;
+  //     const needMeta = videoInfo.meta == null;
 
-      if (!needLink && !needMeta) return;
+  //     if (!needLink && !needMeta) return;
 
-      try {
-        const seasonNum = type === "series" ? Number(season || 1) : undefined;
-        const episodeNum = type === "series" ? Number(episode || 1) : undefined;
+  //     try {
+  //       const seasonNum = type === "series" ? Number(season || 1) : undefined;
+  //       const episodeNum = type === "series" ? Number(episode || 1) : undefined;
 
-        const [linkResult, metaResult] = await Promise.all([
-          needLink
-            ? invoke<string | null>("get_stream_link", {
-                id,
-                content_type: type,
-                web_url: "http://127.0.0.1:4000",
-                season: seasonNum,
-                episode: episodeNum,
-              })
-            : Promise.resolve(videoInfo.link),
-          needMeta
-            ? fetchMetaDetails(type, id)
-            : Promise.resolve(videoInfo.meta),
-        ]);
+  //       const [linkResult, metaResult] = await Promise.all([
+  //         needLink
+  //           ? invoke<string | null>("get_stream_link", {
+  //               id,
+  //               content_type: type,
+  //               web_url: "http://127.0.0.1:4000",
+  //               season: seasonNum,
+  //               episode: episodeNum,
+  //             })
+  //           : Promise.resolve(videoInfo.link),
+  //         needMeta
+  //           ? fetchMetaDetails(type, id)
+  //           : Promise.resolve(videoInfo.meta),
+  //       ]);
 
-        if (cancelled) return;
-        setVideoInfo({ link: linkResult, meta: metaResult });
-      } catch (e) {
-        console.error("Error loading watch data:", e);
-      }
-    })();
+  //       if (cancelled) return;
+  //       setVideoInfo({ link: linkResult, meta: metaResult });
+  //     } catch (e) {
+  //       console.error("Error loading watch data:", e);
+  //     }
+  //   })();
 
-    return () => {
-      cancelled = true;
-    };
-    // Intentionally depends on the route params + episode params.
-    // If videoInfo is already hydrated (e.g. from DetailsPage state), it will short-circuit.
-  }, [type, id, season, episode, videoInfo.link, videoInfo.meta]);
+  //   return () => {
+  //     cancelled = true;
+  //   };
+  //   // Intentionally depends on the route params + episode params.
+  //   // If videoInfo is already hydrated (e.g. from DetailsPage state), it will short-circuit.
+  // }, [type, id, season, episode, videoInfo.link, videoInfo.meta]);
 
   const streamLink = videoInfo.link ?? null;
   const meta = videoInfo.meta ?? null;
@@ -106,7 +106,12 @@ export default function WatchPage() {
     episodeInfo?.overview || episodeInfo?.description || "";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div
+      style={{
+        paddingTop: "var(--safe-top)",
+      }}
+      className="min-h-screen bg-background mt-15 md:mt-0"
+    >
       {/* Player Section */}
       <div className="relative w-full bg-black">
         {/* Navigation Bar */}

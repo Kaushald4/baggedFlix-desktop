@@ -204,13 +204,23 @@ function HeroBanner() {
   }
 
   return (
-    <div className="relative h-[70vh] md:h-[85vh] overflow-hidden">
+    <div
+      style={{
+        paddingTop: "var(--safe-top)",
+      }}
+      className="relative h-[70vh] md:h-[85vh] overflow-hidden"
+    >
       {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0">
+      <div
+        className="absolute inset-0"
+        style={{
+          paddingTop: "var(--safe-top)",
+        }}
+      >
         <img
           src={currentItem.background || currentItem.poster}
           alt={currentItem.name}
-          className={`object-cover transition-opacity duration-500 ${
+          className={`object-cover transition-opacity duration-500 h-[80vh] ${
             isTransitioning ? "opacity-50" : "opacity-100"
           }`}
         />
@@ -281,7 +291,7 @@ function HeroBanner() {
       </div>
 
       {/* Dots Indicator */}
-      {allItems.length > 1 && (
+      {/* {allItems.length > 1 && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
           {allItems.map((_, index) => (
             <button
@@ -295,7 +305,7 @@ function HeroBanner() {
             />
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

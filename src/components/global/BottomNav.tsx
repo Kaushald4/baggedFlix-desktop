@@ -14,7 +14,7 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-t border-white/10 dark:border-white/10 md:hidden">
+    <div className="fixed bottom-bar bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-t border-white/10 dark:border-white/10 md:hidden">
       <div className="flex justify-around items-center h-16">
         {links.map((link) => {
           const Icon = link.icon;

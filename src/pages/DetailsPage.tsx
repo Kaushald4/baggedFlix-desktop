@@ -86,9 +86,36 @@ export default function DetailsPage() {
     }
   };
 
-  const handleEpisodePlayClick = (href: string, episodeId: string) => {
+  const handleEpisodePlayClick = async (href: string, episodeId: string) => {
     setLoadingEpisodeId(episodeId);
-    navigate(href);
+
+    try {
+      const [, queryString] = href.split("?");
+      const search = new URLSearchParams(queryString || "");
+
+      const season = Number(search.get("season"));
+      const episode = Number(search.get("episode"));
+
+      const streamLink = await invoke<string | null>("get_stream_link", {
+        id,
+        contentType: type,
+        webUrl: "http://localhost:4000",
+        season,
+        episode,
+      });
+
+      navigate(href, {
+        state: {
+          streamLink,
+          meta,
+        },
+      });
+    } catch (e) {
+      console.error("Error fetching stream link:", e);
+      navigate(href);
+    } finally {
+      setLoadingEpisodeId(null);
+    }
   };
 
   const resumeState = useMemo(() => {
@@ -184,18 +211,18 @@ export default function DetailsPage() {
     <div className="min-h-screen bg-background text-foreground pb-20">
       {/* Hero Section with Backdrop */}
       <div className="relative h-[50vh] md:h-[70vh] w-full overflow-hidden mb-12">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 h-[90vh] md:h-[40vh]">
           <img
             src={meta.background || meta.poster}
             alt={meta.name}
-            className="object-cover"
+            className="object-cover h-full w-full"
           />
           <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent" />
           <div className="absolute inset-0 bg-linear-to-r from-background via-background/40 to-transparent" />
         </div>
 
         {/* Navigation Back */}
-        <div className="fixed top-4 left-4 z-50 md:top-24 md:left-8">
+        <div className="fixed top-38 left-4 z-50 md:top-24 md:left-8">
           <Button
             onClick={handleBack}
             variant="ghost"
@@ -232,21 +259,21 @@ export default function DetailsPage() {
                 {meta.name}
               </h1>
 
-              <div className="flex items-center gap-4 text-sm md:text-base text-gray-300">
+              <div className="flex items-center gap-4 text-sm md:text-base dark:text-gray-300 text-black">
                 {meta.year && (
                   <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4 text-primary" />
+                    <Calendar className="w-4 h-4" />
                     <span>{meta.year}</span>
                   </div>
                 )}
                 {meta.runtime && (
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4 text-primary" />
+                  <div className="flex items-center gap-1 dark:text-gray-300 text-black">
+                    <Clock className="w-4 h-4" />
                     <span>{meta.runtime}</span>
                   </div>
                 )}
                 {meta.imdbRating && (
-                  <div className="flex items-center gap-1 text-yellow-400">
+                  <div className="flex items-center gap-1 dark:text-yellow-400 text-black">
                     <Star className="w-4 h-4 fill-current" />
                     <span>{meta.imdbRating}</span>
                   </div>

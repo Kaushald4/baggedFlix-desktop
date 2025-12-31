@@ -6,7 +6,16 @@ import { Toaster } from "react-hot-toast";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
-    <div>
+    <div
+      style={{
+        paddingTop: "var(--safe-top)",
+        paddingBottom: "var(--safe-bottom)",
+        paddingLeft: "var(--safe-left)",
+        paddingRight: "var(--safe-right)",
+        minHeight: "100vh",
+        boxSizing: "border-box",
+      }}
+    >
       <Navbar />
       {children}
       <Footer />
