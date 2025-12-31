@@ -1,6 +1,6 @@
-# MyyFlix Desktop
+# BaggedFlix Desktop
 
-![alt text](./screenshot/myyflix.png "MyyFlix")
+![alt text](./screenshot/baggedFlix.png "BaggedFlix")
 
 A modern cross-platform desktop application for streaming movies and TV series, built with Tauri v2 and React. This project provides a user-friendly interface to browse, watch, and manage your favorite content with features like watchlists, watch history, and seamless streaming.
 
@@ -16,11 +16,16 @@ A modern cross-platform desktop application for streaming movies and TV series, 
 - **Browse Content**: Discover movies and TV series with a clean catalog interface
 - **Search**: Find movies and series using IMDb IDs or other search criteria
 - **Streaming Player**: Integrated video player for seamless content playback
+- **Subtitles**: Automatic subtitle fetching and display for supported content
+- **Resume Playback**: Continue watching movies and episodes right where you left off
+- **Trailers**: Watch trailers for movies and series directly within the app
+- **Cast & Crew**: View detailed information about cast, directors, and writers
 - **Watchlist**: Save movies and series for later viewing
 - **Watch History**: Track your viewing progress and history
 - **Responsive Design**: Optimized for various desktop window sizes
 - **Native Performance**: Rust-based backend for efficient networking and scraping
 - **Proxy Streaming**: Built-in local proxy to handle HLS streams and bypass CORS restrictions
+- **Downloads**: (Coming Soon) Download content for offline viewing
 
 ## Tech Stack
 
@@ -48,7 +53,7 @@ A modern cross-platform desktop application for streaming movies and TV series, 
 
    ```bash
    git clone <repository-url>
-   cd myyflix
+   cd baggedFlix
    ```
 
 2. Install frontend dependencies:
@@ -100,13 +105,17 @@ The output binaries will be located in `src-tauri/target/release/bundle/`.
 ## Project Structure
 
 ```
-myyflix/
+baggedFlix/
 ├── src/                    # Frontend (React) source
-│   ├── components/         # React components (UI, Global, etc.)
+│   ├── assets/             # Static assets
+│   ├── components/         # React components
+│   │   ├── global/         # Global components (Player, Navbar, etc.)
+│   │   └── ui/             # Reusable UI components (shadcn/ui)
 │   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility libraries (API, utils)
-│   ├── pages/              # Application pages (Home, Watch, Details)
-│   ├── store/              # Zustand stores
+│   ├── lib/                # Utility libraries (API, Subtitles, utils)
+│   ├── pages/              # Application pages (Home, Watch, Details, etc.)
+│   ├── providers/          # Context providers (Theme, Query)
+│   ├── store/              # Zustand stores (History, Watchlist, Movie)
 │   ├── App.tsx             # Main React component
 │   └── main.tsx            # Entry point
 ├── src-tauri/              # Backend (Rust) source

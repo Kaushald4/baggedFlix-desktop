@@ -2,7 +2,13 @@ import { WatchPlayer } from "@/components/global/WatchPlayer";
 import { ArrowLeft, Info, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link, useLocation, useParams, useSearchParams } from "react-router";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router";
 import { useState } from "react";
 import { Meta } from "@/lib/api";
 
@@ -10,6 +16,7 @@ export default function WatchPage() {
   const { type, id } = useParams<{ type: string; id: string }>();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const navState = (location.state || null) as {
     streamLink?: string | null;
@@ -107,22 +114,21 @@ export default function WatchPage() {
       style={{
         paddingTop: "var(--safe-top)",
       }}
-      className="min-h-screen bg-background mt-15 md:mt-0"
+      className="min-h-screen bg-background mt-15 md:mt-20"
     >
       {/* Player Section */}
       <div className="relative w-full bg-black">
         {/* Navigation Bar */}
         <div className="absolute top-0 left-0 right-0 z-20 p-4 flex items-center justify-between bg-gradient-to-b from-black/80 dark:from-black/80 to-transparent">
-          <Link to={`/${type}/${id}`}>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-white dark:text-white hover:bg-white/10 dark:hover:bg-white/10 gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-          </Link>
+          <Button
+            onClick={() => navigate(-1)}
+            variant="ghost"
+            size="sm"
+            className="text-white dark:text-white hover:bg-white/10 dark:hover:bg-white/10 gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
           <div className="flex gap-2">
             <Button
               variant="ghost"

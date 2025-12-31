@@ -37,7 +37,7 @@ export function Navbar() {
               to="/"
               className="text-2xl font-black tracking-tighter neon-text bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/50"
             >
-              MYFLIX
+              BaggedFlix
             </Link>
           </div>
 
