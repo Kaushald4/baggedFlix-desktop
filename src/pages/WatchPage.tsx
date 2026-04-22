@@ -101,7 +101,7 @@ export default function WatchPage() {
     type === "series" && meta?.videos
       ? meta.videos.find(
           (v) =>
-            v.season === parseInt(season) && v.episode === parseInt(episode)
+            v.season === parseInt(season) && v.episode === parseInt(episode),
         )
       : null;
 

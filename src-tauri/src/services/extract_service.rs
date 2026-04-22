@@ -28,7 +28,7 @@ pub async fn extract_stream_link(
 
     let res1 = client
         .get(&url)
-        .header("Host", "vidsrc-embed.ru")
+        // .header("Host", "vidsrc-embed.ru")
         .header(
             "User-Agent",
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
@@ -37,6 +37,8 @@ pub async fn extract_stream_link(
         .await?
         .text()
         .await?;
+
+
 
     let first_full_link = {
         let document = Html::parse_document(&res1);
