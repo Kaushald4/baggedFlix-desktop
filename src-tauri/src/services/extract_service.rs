@@ -15,16 +15,18 @@ pub async fn extract_stream_link(
     web_url: &str,
 ) -> Result<Option<String>, Box<dyn std::error::Error + Send + Sync + 'static>> {
     let url = if content_type == "movie" {
-        format!("https://vidsrc-embed.ru/embed/movie/{id}")
+        
+        format!("https://vsembed.ru/embed/movie?imdb={id}")
     } else {
         let s = season.ok_or("season required")?;
         let e = episode.ok_or("episode required")?;
-        format!("https://vidsrc-embed.ru/embed/tv/{id}/{s}-{e}")
+        format!("https://vsembed.ru/embed/tv/{id}/{s}-{e}")
     };
 
     let client = Client::new();
 
     /* ---------------- first request ---------------- */
+
 
     let res1 = client
         .get(&url)
@@ -37,7 +39,6 @@ pub async fn extract_stream_link(
         .await?
         .text()
         .await?;
-
 
 
     let first_full_link = {
@@ -55,11 +56,10 @@ pub async fn extract_stream_link(
     };
 
     /* ---------------- second request ---------------- */
-
     let res2 = client
         .get(&first_full_link)
-        .header("Host", "cloudnestra.com")
-        .header("Referer", &url)
+        // .header("Host", "cloudnestra.com")
+        // .header("Referer", &url)
         .header(
             "User-Agent",
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
@@ -73,13 +73,13 @@ pub async fn extract_stream_link(
     let caps = re.captures(&res2).ok_or("iframe path not found")?;
     let iframe_path = caps.get(1).unwrap().as_str();
 
-    let full_iframe_link = format!("https://cloudnestra.com{iframe_path}");
+    let full_iframe_link = format!("https://cloudorchestranova.com{iframe_path}");
 
     /* ---------------- third request ---------------- */
 
     let res3 = client
         .get(&full_iframe_link)
-        .header("Host", "cloudnestra.com")
+        // .header("Host", "cloudnestra.com")
         .header("Referer", &full_iframe_link)
         .header(
             "User-Agent",
@@ -89,6 +89,26 @@ pub async fn extract_stream_link(
         .await?
         .text()
         .await?;
+
+        let token: String = client
+            .get("https://yonderunyielding.website/generate.php")
+            .header(
+                "User-Agent", 
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36")
+                .send().await?.text().await?;
+        let re = Regex::new(r#"var\s+master_urls\s*=\s*"([^"]+)""#).unwrap();
+
+
+       if let Some(caps) = re.captures(&res3) {
+        let urls = caps[1].replace("__TOKEN__", &token);
+        let parts: Vec<&str> = urls.split(" or ").collect();
+
+        if let Some(first) = parts.first() {
+            let proxied = proxy_link(first, web_url).await?;
+            return Ok(Some(proxied));
+        }
+    }
+
 
     let (encoded_id, encoded_str) = {
         let doc3 = Html::parse_document(&res3);
