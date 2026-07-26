@@ -9,11 +9,12 @@ use axum::{
 use serde::Deserialize;
 use serde_json::json;
 
-use crate::stream::proxy::proxy_link;
+use crate::stream::proxy::proxy_link_with_referer;
 
 #[derive(Deserialize)]
 struct StreamQuery {
     url: Option<String>,
+    referer: Option<String>,
 }
 
 fn request_base_url(headers: &HeaderMap) -> String {
@@ -47,7 +48,7 @@ async fn stream_handler(headers: HeaderMap, Query(q): Query<StreamQuery>) -> imp
 
     let web_url = request_base_url(&headers);
 
-    match proxy_link(&content_url, &web_url).await {
+    match proxy_link_with_referer(&content_url, &web_url, q.referer.as_deref()).await {
         Ok(data) => {
             let mut resp = Response::new(Body::from(data));
             resp.headers_mut().insert(
@@ -79,14 +80,18 @@ async fn proxy_stream_handler(Query(q): Query<StreamQuery>) -> impl IntoResponse
 
     let client = reqwest::Client::new();
 
-    let upstream = match client
-        .get(content_url)
+    let mut req = client
+        .get(&content_url)
         .header(
             header::USER_AGENT,
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        )
-        .send()
-        .await
+        );
+
+    if let Some(ref r) = q.referer {
+        req = req.header(header::REFERER, r);
+    }
+
+    let upstream = match req.send().await
     {
         Ok(r) => r,
         Err(_) => {

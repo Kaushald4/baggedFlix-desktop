@@ -9,6 +9,7 @@ import { fetchSubtitles } from "@/lib/subtitleApi";
 interface WatchPlayerProps {
   id: string;
   file: string;
+  isDirectFile?: boolean;
   contentId: string;
   meta: {
     metaId: string;
@@ -26,6 +27,7 @@ interface WatchPlayerProps {
 export function WatchPlayer({
   id,
   file,
+  isDirectFile = false,
   contentId,
   meta,
   videos = [],
@@ -74,6 +76,7 @@ export function WatchPlayer({
     <Player
       id={id}
       file={file}
+      isDirectFile={isDirectFile}
       onTimeUpdate={handleTimeUpdate}
       startTime={startTime}
       title={playerTitle}
