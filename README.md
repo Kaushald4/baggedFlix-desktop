@@ -102,6 +102,26 @@ npm run tauri build
 
 The output binaries will be located in `src-tauri/target/release/bundle/`.
 
+## macOS Gatekeeper
+
+If you download the `.dmg` installer on macOS and see a warning that the app cannot be opened because it is from an unidentified developer, or if macOS says the app is damaged and can’t be opened, use the following steps to bypass Gatekeeper:
+
+1. Open `System Settings` > `Privacy & Security`.
+2. Scroll down to `Security` and click `Open Anyway` for the blocked BaggedFlix app.
+3. If prompted again, choose `Open` to confirm.
+
+If the app still fails to open with a “damaged” message, use Terminal after mounting the `.dmg` and installing the app:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Bagged\ Movies.app
+```
+
+Then open the app again using Control-click > `Open` if necessary.
+
+This is only needed when macOS blocks the app due to Gatekeeper checks for unsigned or unnotarized builds.
+
+> Note: This applies when you download the app from the GitHub Releases section.
+
 ## Project Structure
 
 ```
